@@ -1,0 +1,42 @@
+version: '2.2'
+services:
+  misearch4:
+          # image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    image: 2bd69c322e98       
+    container_name: misearch4
+    environment:
+      - "ELASTIC_PASSWORD=1qazxsW@"
+        # - node.name=misearch1
+        # - cluster.name=123
+        # - discovery.seed_hosts=misearch2,misearch3
+        # - cluster.initial_master_nodes=misearch1,misearch2,misearch3
+        # - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+        # - xpack.security.enabled= true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "/mnt/store/misearch4/data:/usr/share/elasticsearch/data:rw"
+      - "/opt/misearch4/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro"
+      - "/opt/misearch4/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro"
+      - "/opt/misearch4/config/jvm.options:/usr/share/elasticsearch/config/jvm.options:ro"
+      - "/opt/misearch4/config/certs:/usr/share/elasticsearch/config/certs:ro"
+      - "/opt/misearch4/config/hunspell:/usr/share/elasticsearch/config/hunspell:ro"
+      - "/opt/misearch4/logs:/usr/share/elasticsearch/logs:rw"
+    ports:
+      - 9204:9200
+    networks:
+      app2:
+        ipv4_address: 192.168.118.17
+
+
+networks: 
+  app2:
+    external:
+      name: elk_app
+            #      driver: default
+      #      config:
+              #      - subnet: 192.168.119.0/24
+        #        gateway: 192.168.119.2

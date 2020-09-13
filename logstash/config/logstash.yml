@@ -1,0 +1,13 @@
+
+
+
+node.name: 'logstash'
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.username: "elastic"
+xpack.monitoring.elasticsearch.password: "1qazxsW@"
+xpack.monitoring.elasticsearch.hosts: [ 'http://192.168.1.42:9200', 'http://192.168.1.42:9201', 'http://192.168.118.13:9200' ]
+xpack.monitoring.collection.interval: 10s
+xpack.monitoring.collection.pipeline.details.enabled: true
+#xpack.monitoring.elasticsearch.ssl.certificate_authority: /usr/share/logstash/config/certs/ca.pem
+config.reload.automatic: true
+config.reload.interval: 30

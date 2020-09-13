@@ -1,0 +1,46 @@
+
+cluster.name: 123
+node.name: misearch1
+#node.attr.rack: r1
+#cluster.routing.allocation.awareness.attributes: foobar
+# Lock the memory on startup:
+bootstrap.memory_lock: true
+network.host: ['192.168.118.11']
+#discovery.seed_hosts: ['misearch2', 'misearch3']
+discovery.zen.ping.unicast.hosts: 
+  - 192.168.118.11
+  - 192.168.118.12
+  - 192.168.118.13
+
+cluster.initial_master_nodes:
+  - 192.168.118.11
+  - 192.168.118.12
+  - 192.168.118.13
+#gateway.recover_after_nodes: 3
+action.destructive_requires_name: true
+# X-Pack security settings
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
+indices.analysis.hunspell.dictionary.lazy: false
+#thread_pool:
+#    write:
+#        size: 9
+#xpack.security.enabled: true
+#xpack.security.transport.ssl.enabled: true
+#xpack.security.transport.ssl.keystore.type: PKCS12
+#xpack.security.transport.ssl.verification_mode: certificate
+#xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
+#xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
+#xpack.security.transport.ssl.truststore.type: PKCS12
+
+# Auth method
+#xpack:
+#  security:
+#     authc:
+#       realms:
+#          native:
+#             native1:
+#                order: 0

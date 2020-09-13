@@ -1,0 +1,173 @@
+version: '2.2'
+services:
+  misearch1:
+          # image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    image: 2bd69c322e98   
+    container_name: misearch1
+    environment:
+      - "ELASTIC_PASSWORD=1qazxsW@"
+        # node.name=misearch1
+        # cluster.name=123
+        # discovery.seed_hosts=misearch2,misearch3
+        # cluster.initial_master_nodes=misearch1,misearch2,misearch3
+        # bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+        # xpack.security.enabled=true
+        # xpack.security.transport.ssl.enabled=true
+        # xpack.security.transport.ssl.verification_mode=certificate
+        # xpack.security.transport.ssl.keystore.path=certs/elastic-certificates.p12
+        # xpack.security.transport.ssl.truststore.path=certs/elastic-certificates.p12
+        # cluster.initial_master_nodes= ['misearch1', 'misearch2', 'misearch3']
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "/mnt/store/misearch1/data:/usr/share/elasticsearch/data:rw"
+      - "/opt/misearch1/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro"
+      - "/opt/misearch1/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro"
+      - "/opt/misearch1/config/jvm.options:/usr/share/elasticsearch/config/jvm.options:ro"
+      - "/opt/misearch1/config/certs:/usr/share/elasticsearch/config/certs:ro"
+      - "/opt/misearch1/config/hunspell:/usr/share/elasticsearch/config/hunspell:ro"
+      - "/opt/misearch1/logs:/usr/share/elasticsearch/logs:rw"
+    ports:
+      - 9200:9200
+      - 9300:9300
+        #network_mode: host
+    networks:
+      app:
+        ipv4_address: 192.168.118.11
+
+  misearch2:
+    image: 2bd69c322e98      
+    container_name: misearch2
+    environment:
+      - "ELASTIC_PASSWORD=1qazxsW@"
+        #- node.name=misearch2
+        #- cluster.name=123
+        #- discovery.seed_hosts=misearch1,misearch3
+        #- cluster.initial_master_nodes=misearch1,misearch2,misearch3
+        #- bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        #- xpack.security.enabled=true
+        #- xpack.security.transport.ssl.enabled=true
+        #- xpack.security.transport.ssl.verification_mode=certificate
+        #- xpack.security.transport.ssl.keystore.path=certs/elastic-certificates.p12
+        #- xpack.security.transport.ssl.truststore.path=certs/elastic-certificates.p12
+        #- cluster.initial_master_nodes= ['misearch1', 'misearch2', 'misearch3']
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "/mnt/store/misearch2/data:/usr/share/elasticsearch/data:rw"
+      - "/opt/misearch2/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro"
+      - "/opt/misearch2/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro"
+      - "/opt/misearch2/config/jvm.options:/usr/share/elasticsearch/config/jvm.options:ro"
+      - "/opt/misearch2/config/certs:/usr/share/elasticsearch/config/certs:ro"
+      - "/opt/misearch2/config/hunspell:/usr/share/elasticsearch/config/hunspell:ro"
+      - "/opt/misearch2/logs:/usr/share/elasticsearch/logs:rw"
+    ports:
+      - 9201:9200
+        # network_mode: host
+
+    networks:
+      app:
+        ipv4_address: 192.168.118.12
+
+  misearch3:
+    image: 2bd69c322e98
+    container_name: misearch3
+    environment:
+      - "ELASTIC_PASSWORD=1qazxsW@"
+        #- node.name=misearch3
+        #- cluster.name=123
+        #- discovery.seed_hosts=misearch1,misearch2
+        #- cluster.initial_master_nodes=misearch1,misearch2,misearch3
+        #- bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        #- xpack.security.enabled=true
+        #- xpack.security.transport.ssl.enabled=true
+        #- xpack.security.transport.ssl.verification_mode=certificate
+        #- xpack.security.transport.ssl.keystore.path=certs/elastic-certificates.p12
+        #- xpack.security.transport.ssl.truststore.path=certs/elastic-certificates.p12
+        #- discovery.zen.ping.unicast.hosts= ["misearch1", "misearch2"]
+        #- discovery.zen.minimum_master_nodes = 1
+        #- discovery.zen.ping.multicast.enabled=false
+        #- node.master= true
+        #- node.data= true
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "/mnt/store/misearch3/data:/usr/share/elasticsearch/data:rw"
+      - "/opt/misearch3/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro"
+      - "/opt/misearch3/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro"
+      - "/opt/misearch3/config/jvm.options:/usr/share/elasticsearch/config/jvm.options:ro"
+      - "/opt/misearch3/config/certs:/usr/share/elasticsearch/config/certs:ro"
+      - "/opt/misearch3/config/hunspell:/usr/share/elasticsearch/config/hunspell:ro"
+      - "/opt/misearch3/logs:/usr/share/elasticsearch/logs:rw"
+    ports:
+      - 9202:9200
+        #network_mode: host
+    networks:
+      app:
+        ipv4_address: 192.168.118.13
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.5.1
+    container_name: kibana
+    depends_on:
+      - misearch1
+      - misearch2
+      - misearch3
+    volumes:
+      - "/opt/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro"
+    ports:
+      - 5601:5601
+        #network_mode: host
+    environment:
+      ELASTICSEARCH_URL: http://192.168.1.42:9200
+      ELASTICSEARCH_HOSTS: http://192.168.1.42:9200
+    networks:
+      app:
+        ipv4_address: 192.168.118.14
+
+      #volumes:
+        #  data01:
+        #    driver: local
+        #  data02:
+        #    driver: local
+        # data03:
+        #    driver: local
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.5.1
+    container_name: logstash
+    ports:
+      - 5044:5044
+      - 5045:5045
+      - 5046:5046
+      - 5047:5047
+      - 5048:5048
+      - 5049:5049
+
+    volumes:
+      - "/opt/logstash/pipeline:/usr/share/logstash/pipeline"
+      - "/opt/logstash/config:/usr/share/logstash/config"
+      - "/opt/logstash/logs:/usr/share/logstash/logs"
+
+          #  - /opt/logstash:/usr/share/logstash/:ro
+    networks:
+      app:
+        ipv4_address: 192.168.118.19
+
+networks: 
+  app:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.118.0/24
+          gateway: 192.168.118.2

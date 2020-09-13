@@ -1,0 +1,4 @@
+CISCOTIMESTAMPTZ %{MONTH} +%{MONTHDAY}(?: %{YEAR})? %{TIME} %{TZ}
+NEXUSTIMESTAMP %{YEAR} %{MONTH} %{MONTHDAY} %{TIME}( %{WORD:TIMEZONE})?
+HOSTNAME \b(?:[0-9A-Za-z][0-9A-Za-z-]{0,62})(?:\.(?:[0-9A-Za-z][0-9A-Za-z-]{0,62}))*(\.?|\b)
+HOST %{HOSTNAME}

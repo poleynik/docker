@@ -5,7 +5,7 @@ services:
     image: 2bd69c322e98       
     container_name: misearch4
     environment:
-      - "ELASTIC_PASSWORD=1qazxsW@"
+      - "ELASTIC_PASSWORD=123"
         # - node.name=misearch1
         # - cluster.name=123
         # - discovery.seed_hosts=misearch2,misearch3
